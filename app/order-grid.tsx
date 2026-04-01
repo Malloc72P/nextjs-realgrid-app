@@ -34,6 +34,7 @@ export function OrderGrid({ orders }: OrderGridProps) {
                 { fieldName: 'id', dataType: 'number' as ValueType },
                 { fieldName: 'price', dataType: 'number' as ValueType },
                 { fieldName: 'qty', dataType: 'number' as ValueType },
+                { fieldName: 'deleteBtn', dataType: 'text' as ValueType },
             ]);
 
             // 컬럼 정의 (화면 표시)
@@ -43,8 +44,9 @@ export function OrderGrid({ orders }: OrderGridProps) {
                 { name: 'qty', fieldName: 'qty', header: { text: 'Qty' }, editable: true },
                 {
                     name: 'deleteBtn',
+                    fieldName: 'deleteBtn',
                     header: { text: '' },
-                    renderer: { type: 'button', label: 'Delete' },
+                    renderer: { type: 'button' },
                     width: 100,
                     editable: false,
                     sortable: false,
@@ -52,7 +54,7 @@ export function OrderGrid({ orders }: OrderGridProps) {
             ]);
 
             grid.setDataSource(ds);
-            ds.setRows(orders.map(o => ({ id: o.id, price: o.price, qty: o.qty })));
+            ds.setRows(orders.map(o => ({ id: o.id, price: o.price, qty: o.qty, deleteBtn: 'Delete' })));
 
             // 다른 행으로 이동할 때 편집 커밋
             grid.editOptions.commitWhenLeave = true;
@@ -74,8 +76,8 @@ export function OrderGrid({ orders }: OrderGridProps) {
 
             // 삭제 버튼 클릭 → 서버 삭제 (낙관적 업데이트)
             grid.onCellItemClicked = (_grid, index) => {
-                const { column, dataRow } = index;
-                if (column !== 'deleteBtn' || dataRow === undefined) return true;
+                const { dataRow, fieldName } = index;
+                if (fieldName !== 'deleteBtn' || dataRow === undefined) return true;
 
                 const rowData = ds.getJsonRow(dataRow) as Order;
                 ds.removeRow(dataRow);
@@ -107,7 +109,7 @@ export function OrderGrid({ orders }: OrderGridProps) {
         if (!ds) return;
 
         const tempId = -Date.now();
-        const tempDataRow = ds.addRow({ id: tempId, price: 0, qty: 0 });
+        const tempDataRow = ds.addRow({ id: tempId, price: 0, qty: 0, deleteBtn: 'Delete' });
 
         try {
             const created = await createOrderAction({ price: 0, qty: 0 });
