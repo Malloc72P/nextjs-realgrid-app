@@ -13,7 +13,7 @@ export default function RootLayout({ children }: RootLayoutType) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
-        <Script id="realchart-license" strategy="beforeInteractive">
+        <Script id="realgrid-license" strategy="beforeInteractive">
           {[
             `var realGrid2Lic = "upVcPE+wPOmtLjqyBIh9RkM/nBOseBrflwxYpzGZyYm9cY8amGDkiMnVeQKUHJDjW2y71jtk+wusmH0EXF7/BSDtCeQ9xhoX0l6QA0zLXMhcQ7OuMdFsaV7svsLh1nO8wZC9e6cWe2MKQZT/Z0n3iSR+dQr92CVep0O+D2+yWY7EWTBoTGHxQDYoebzoYRFI";`,
           ].join('\n')}
